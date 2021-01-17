@@ -34,4 +34,12 @@ public class VehicleDto {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+    public static VehicleDto mapForTruckDto(TruckDto truckDto) {
+        return new VehicleDto(truckDto.getId(), truckDto.getName());
+    }
+
+    public static VehicleDto mapForCarDTO(CarDto carDto) {
+        return new VehicleDto(carDto.getId(), carDto.getName());
+    }
 }

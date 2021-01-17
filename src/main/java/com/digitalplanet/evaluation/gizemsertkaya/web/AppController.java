@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @Controller
@@ -44,15 +45,19 @@ public class AppController {
         List<CarDto> cars = appService.findCars();
         List<TruckDto> trucks = appService.findTrucks();
 
-        List<VehicleDto> vehicles = new ArrayList<>();
+        List<VehicleDto> vehicleDtos = cars.stream()
+                .map(VehicleDto::mapForCarDTO)
+                .collect(Collectors.toList());
 
-        for (int i = 0; i < cars.size(); i++) {
-            vehicles.add(new VehicleDto(cars.get(i).getId(), cars.get(i).getName()));
-        }
-        for (int i = 0; i < trucks.size(); i++) {
-            vehicles.add(new VehicleDto(trucks.get(i).getId(), trucks.get(i).getName()));
-        }
-        return ResponseEntity.ok(vehicles);
+        List<VehicleDto> collect = trucks.stream()
+                .map(VehicleDto::mapForTruckDto)
+                .collect(Collectors.toList());
+
+        vehicleDtos.addAll(collect);
+
+        vehicleDtos.forEach(System.out::println);
+
+        return ResponseEntity.ok(vehicleDtos);
     }
 
     @RequestMapping(value = "/car/add", method = RequestMethod.POST)
